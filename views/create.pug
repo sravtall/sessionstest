@@ -5,11 +5,11 @@ html
     link(rel='stylesheet' href='static/css/login.css')
     body 
         #container 
-            form(action='/login' method='POST')
-                h1 Login 
+            form(action='/create' method='POST')
+                h1 Create 
                 label Username: 
                 input(type='text' name='username')
                 label Password: 
                 input(type='password' name='password')
-                input(type='submit' value='Login')
-                a.btn(href='/create') Create
+                input(type='submit' value='Create')
+                a.btn(href='/login') Login

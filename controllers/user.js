@@ -1,3 +1,5 @@
+const bcrypt = require("bcrypt");
+
 const {
   models: { User },
 } = require("../models");
@@ -7,13 +9,25 @@ module.exports = {
     if (req.body.username && req.body.password) {
       const { username, password } = req.body;
 
-      await User.create({
-        username,
-        password,
-      });
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, async function (err, hash) {
+          let user = await User.findOne({
+            where: { username, password: hash },
+          });
 
-      res.cookie("username", username, { secure: true });
-      res.render("profile", { username });
+          if (user) {
+            res.redirect("login");
+          } else {
+            await User.create({
+              username,
+              password: hash,
+            });
+
+            res.cookie("username", username, { secure: true });
+            res.render("profile", { username });
+          }
+        });
+      });
     } else {
       res.send("not added to database");
     }
@@ -23,17 +37,21 @@ module.exports = {
     if (req.body.username && req.body.password) {
       const { username, password } = req.body;
 
-      let user = await User.findOne({
-        where: { username, password },
+      await User.findOne({ where: { username } }).then((user) => {
+        if (user) {
+          bcrypt.compare(password, user.password, (err, data) => {
+            if (data) {
+              req.session.user = user;
+              req.session.authorized = true;
+              res.render("profile", { username });
+            } else {
+              res.render("login");
+            }
+          });
+        } else {
+          res.render("login");
+        }
       });
-
-      if (user) {
-        req.session.user = user;
-        req.session.authorized = true;
-        res.render("profile", { username });
-      } else {
-        res.render("login");
-      }
     }
   },
 };

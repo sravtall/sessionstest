@@ -42,3 +42,13 @@ input[type="submit"] {
   margin-top: 5px;
   border-radius: 5px;
 }
+
+.btn {
+  width: 250px;
+  height: 25px;
+  border-radius: 5px;
+  border: transparent;
+  padding: 2px 0 2px 5px;
+  margin: 10px 0;
+  text-align: center;
+}

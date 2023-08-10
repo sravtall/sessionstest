@@ -1,7 +1,9 @@
+require("dotenv").config();
+
 module.exports = {
-  HOST: "testdb.crzx6p3mkr5e.us-east-2.rds.amazonaws.com",
-  USER: "admin",
-  PASSWORD: "testing123",
-  DATABASE: "my-express-app",
+  HOST: process.env.HOST,
+  USER: process.env.USER,
+  PASSWORD: process.env.PASSWORD,
+  DATABASE: process.env.DATABASE,
   DIALECT: "mysql",
 };
